@@ -40,17 +40,24 @@ Welcome to my **interactive portfolio website**, built using **React.js**, **Tai
 
 📦 portfolio
 ├── public/
-│ ├── models/ # 3D .glb model
-│ ├── Resume.pdf # Downloadable resume
-│ └── favicon, assets # Icons, logos
+│   ├── models/              # 3D .glb model (e.g. avtar.glb)
+│   ├── Resume.pdf           # Downloadable resume file
+│   ├── favicon.ico          # Website favicon
+│   └── assets/              # Social icons, images, logos, etc.
+│
 ├── src/
-│ ├── components/ # Modular UI components
-│ ├── pages/ # About, Skills, Projects, etc.
-│ ├── App.jsx
-│ └── main.jsx
-├── tailwind.config.js
-├── vite.config.js
-└── README.md
+│   ├── components/          # Reusable UI components (e.g. Sidebar, Navigation)
+│   ├── pages/               # Sections like About, Skills, Projects, Contact
+│   ├── App.jsx              # Main app structure
+│   └── main.jsx             # React DOM entry point
+│
+├── tailwind.config.js       # Tailwind CSS configuration
+├── postcss.config.js        # PostCSS setup (usually auto-generated)
+├── vite.config.js           # Vite bundler config
+├── index.html               # Root HTML file
+├── package.json             # Project metadata and dependencies
+├── README.md                # Project documentation
+└── .gitignore               # Files/folders to ignore in Git
 
 
 ---
