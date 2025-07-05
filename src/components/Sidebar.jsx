@@ -126,7 +126,7 @@ const Sidebar = ({ isMobile }) => {
 
           {/* GeeksforGeeks */}
           <a
-            href="https://auth.geeksforgeeks.org/user/YOUR_USERNAME_HERE"
+            href="https://www.geeksforgeeks.org/user/shu05/"
             target="_blank"
             rel="noopener noreferrer"
             title="GeeksforGeeks"
