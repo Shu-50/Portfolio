@@ -1,12 +1,79 @@
-# React + Vite
+# 🚀 Lawhare Sudhanshu D. – Developer Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Welcome to my **interactive portfolio website**, built using **React.js**, **Tailwind CSS**, and **Three.js**, featuring a real-time animated 3D avatar. This project showcases my journey, skills, experiences, and projects — all in a clean, responsive, and modern UI.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🌐 Live Demo
 
-## Expanding the ESLint configuration
+👉 [Check it Out](https://your-deployed-link.com)  
+📄 [Download Resume](./public/Resume.pdf)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## ✨ Features
+
+- ⚙️ 3D avatar model (GLB) rendered via Three.js
+- 📱 Mobile-responsive design using Tailwind CSS
+- 🎯 Sections for About, Skills, Projects, Certificates, and Experience
+- 💌 EmailJS contact form to receive messages directly
+- 🔄 Avatar resets on canvas click
+- 👀 Avatar's eyes follow the mouse cursor
+- 🌈 Neon hover effects and custom glow
+- 📄 Resume download button
+- 🔗 Social icons (LinkedIn, GitHub, Instagram, GFG)
+
+---
+
+## 🧑‍💻 Tech Stack
+
+- **Frontend**: React.js + Tailwind CSS
+- **3D Rendering**: Three.js (`@react-three/fiber`, `@react-three/drei`)
+- **Animations**: `react-spring`, `framer-motion`
+- **Icons**: Lucide React, Font Awesome
+- **Email Handling**: EmailJS
+- **Hosting**: GitHub Pages / Vercel / Netlify
+
+---
+
+## 📁 Project Structure
+
+📦 portfolio
+├── public/
+│ ├── models/ # 3D .glb model
+│ ├── Resume.pdf # Downloadable resume
+│ └── favicon, assets # Icons, logos
+├── src/
+│ ├── components/ # Modular UI components
+│ ├── pages/ # About, Skills, Projects, etc.
+│ ├── App.jsx
+│ └── main.jsx
+├── tailwind.config.js
+├── vite.config.js
+└── README.md
+
+
+---
+
+## 🚀 Run Locally
+
+```bash
+git clone https://github.com/your-username/portfolio.git
+cd portfolio
+npm install
+npm run dev
+
+```
+📬 Contact
+📧 Email: lawhares@gmail.com
+
+📱 Phone: +91-9665542046
+
+🔗 LinkedIn: sudhanshu-lawhare
+
+💻 GitHub: Shu-50
+
+📸 Instagram: @su.dhansh.u
+
+💡 GeeksForGeeks: Profile
+
