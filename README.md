@@ -39,25 +39,32 @@ Welcome to my **interactive portfolio website**, built using **React.js**, **Tai
 ## 📁 Project Structure
 
 📦 portfolio
-├── public/
-│   ├── models/              # 3D .glb model (e.g. avtar.glb)
-│   ├── Resume.pdf           # Downloadable resume file
-│   ├── favicon.ico          # Website favicon
-│   └── assets/              # Social icons, images, logos, etc.
+├── public
+│   ├── models                 # 3D .glb model(s) like avtar.glb
+│   ├── Resume.pdf             # Downloadable resume
+│   ├── favicon.ico            # Website favicon
+│   └── assets                 # Logos, icons, and other static assets
 │
-├── src/
-│   ├── components/          # Reusable UI components (e.g. Sidebar, Navigation)
-│   ├── pages/               # Sections like About, Skills, Projects, Contact
-│   ├── App.jsx              # Main app structure
-│   └── main.jsx             # React DOM entry point
+├── src
+│   ├── components             # Reusable components (Sidebar, Navbar, etc.)
+│   ├── pages                  # All major sections (About, Projects, Contact, etc.)
+│   │   ├── About.jsx
+│   │   ├── Skills.jsx
+│   │   ├── Projects.jsx
+│   │   ├── Certificates.jsx
+│   │   ├── Experience.jsx
+│   │   └── Contact.jsx
+│   ├── App.jsx                # Root component
+│   └── main.jsx               # Entry point (ReactDOM.createRoot)
 │
-├── tailwind.config.js       # Tailwind CSS configuration
-├── postcss.config.js        # PostCSS setup (usually auto-generated)
-├── vite.config.js           # Vite bundler config
-├── index.html               # Root HTML file
-├── package.json             # Project metadata and dependencies
-├── README.md                # Project documentation
-└── .gitignore               # Files/folders to ignore in Git
+├── tailwind.config.js         # Tailwind CSS configuration
+├── postcss.config.js          # PostCSS setup
+├── vite.config.js             # Vite config
+├── index.html                 # Main HTML file
+├── package.json               # Project metadata + dependencies
+├── README.md                  # Documentation
+└── .gitignore                 # Git ignore rules
+
 
 
 ---
