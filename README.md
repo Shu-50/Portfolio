@@ -37,7 +37,7 @@ Welcome to my **interactive portfolio website**, built using **React.js**, **Tai
 ---
 
 ## 📁 Project Structure
-
+```
 📦 portfolio
 ├── public
 │   ├── models                 # 3D .glb model(s) like avtar.glb
@@ -65,7 +65,7 @@ Welcome to my **interactive portfolio website**, built using **React.js**, **Tai
 ├── README.md                  # Documentation
 └── .gitignore                 # Git ignore rules
 
-
+```
 
 ---
 
