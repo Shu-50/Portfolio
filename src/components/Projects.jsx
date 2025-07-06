@@ -10,7 +10,7 @@ const Projects = () => {
       tech: ["React", "API Integration", "JavaScript", "Tailwind Css"],
       sourceCode: "https://github.com/Shu-50/Pokedex",
       liveDemo: "https://pokedex-all-gen.netlify.app",
-      image: "../pokedex.png",
+      image: "../pokedex.webp",
     },
 
     {
@@ -20,7 +20,7 @@ const Projects = () => {
       tech: ["React Js", "Tailwind Css", "API"],
       sourceCode: "https://github.com/Shu-50/OmniShelf",
       liveDemo: "https://omnishelf.vercel.app/",
-      image: "../omnishelf.png",
+      image: "../omnishelf.webp",
     },
 
     {
@@ -29,8 +29,8 @@ const Projects = () => {
         "ML prototype which can take hand gesture and it's label as input to create data set which is used to train model and then, that recognizes hand gestures and converts them to English text, then translates to Hindi with audio output using Google Translate library.",
       tech: ["Python", "OpenCV", "MediaPipe", "ML"],
       sourceCode: "https://github.com/Shu-50/SIH",
-      liveDemo: "/work.jpg",
-      image: "../nothosted.jpg",
+      liveDemo: "/work.webp",
+      image: "../nothosted.webp",
     },
     {
       title: "Solar System & Constellation",
@@ -39,7 +39,7 @@ const Projects = () => {
       tech: ["JavaScript", "CSS", "HTML"],
       sourceCode: "https://github.com/Shu-50/OctaNet_JAN",
       liveDemo: "https://star-cluster.netlify.app",
-      image: "../solarsystem.png",
+      image: "../solarsystem.webp",
     },
 
     {
@@ -49,7 +49,7 @@ const Projects = () => {
       tech: ["React.js", "JavaScript", "CSS"],
       sourceCode: "https://github.com/Shu-50/XoX-Loop-Game",
       liveDemo: "https://xox-loop.netlify.app",
-      image: "../xox.png",
+      image: "../xox.webp",
     },
     {
       title: "2D Mario-like Game",
@@ -59,7 +59,7 @@ const Projects = () => {
       sourceCode: "#",
       liveDemo:
         "https://www.linkedin.com/posts/sudhanshu-lawhare_gamedevelopment-godotengine-2dgames-activity-7285601050043052033-JCbp?utm_source=share&utm_medium=member_desktop&rcm=ACoAAEAU1dkByYNDB4CEpZTWc7VOvJs1X-IKkpM",
-      image: "../mariogame.png",
+      image: "../mariogame.webp",
     },
 
     {
@@ -69,7 +69,7 @@ const Projects = () => {
       tech: ["React.js", "JavaScript", "Tailwind CSS"],
       sourceCode: "https://github.com/Shu-50/Todo-Task-Manager",
       liveDemo: "https://todo-tasksmanager.netlify.app",
-      image: "../todo.png",
+      image: "../todo.webp",
     },
   ];
 

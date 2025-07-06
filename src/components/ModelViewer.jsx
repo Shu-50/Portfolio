@@ -3,36 +3,30 @@ import { Canvas, useThree } from "@react-three/fiber";
 import { OrbitControls, useGLTF } from "@react-three/drei";
 import { useSpring, a } from "@react-spring/three";
 
-// Animated model component
 const Model = ({ onLoaded }) => {
   const gltf = useGLTF("/models/avtar.glb");
 
   const [spring, api] = useSpring(() => ({
     rotation: [0, 0, 0],
     position: [0, -1.5, 0],
-    config: { mass: 1, tension: 170, friction: 26 }
+    config: { mass: 1, tension: 170, friction: 26 },
   }));
 
   const { gl } = useThree();
 
-  // Reset animation on canvas click
   useEffect(() => {
     const handleClick = () => {
       api.start({
         rotation: [0, 0, 0],
-        position: [0, -1.5, 0]
+        position: [0, -1.5, 0],
       });
     };
-
     gl.domElement.addEventListener("click", handleClick);
     return () => gl.domElement.removeEventListener("click", handleClick);
   }, [gl, api]);
 
-  // Notify parent when loaded
   useEffect(() => {
-    if (gltf) {
-      onLoaded?.(); // Call only if onLoaded is passed
-    }
+    if (gltf && onLoaded) onLoaded();
   }, [gltf, onLoaded]);
 
   return (
@@ -42,7 +36,6 @@ const Model = ({ onLoaded }) => {
   );
 };
 
-// Main Viewer with canvas
 const ModelViewer = ({ onLoaded }) => {
   return (
     <Canvas camera={{ position: [0, 0, 3], fov: 45 }}>
