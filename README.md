@@ -6,7 +6,7 @@ Welcome to my **interactive portfolio website**, built using **React.js**, **Tai
 
 ## 🌐 Live Demo
 
-👉 [Check it Out](https://your-deployed-link.com)  
+👉 [Check it Out](https://portfolio-shu.vercel.app)  
 📄 [Download Resume](./public/Resume.pdf)
 
 ---
