@@ -3,26 +3,35 @@ import { Mail, Phone, Linkedin, Github, Send, CheckCircle } from "lucide-react";
 import emailjs from "emailjs-com";
 
 const Contact = () => {
-  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
   const [isSending, setIsSending] = useState(false);
   const [showToast, setShowToast] = useState(false);
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
+    const apiKey = import.meta.env.VITE_API_KEY;
+    const serviceKey = import.meta.env.VITE_SERVICE_API_KEY;
+    const templateKey = import.meta.env.VITE_TEMPLATE_API_KEY;
 
     if (formData.name && formData.email && formData.message) {
       setIsSending(true);
 
       emailjs
         .send(
-          "service_04z1i4z",
-          "template_a2lz8zf",
+          
+          serviceKey,
+          
+          templateKey,
           {
             name: formData.name,
             email: formData.email,
             message: formData.message,
           },
-          "cFb7aAGIrd1kc4lKF"
+          apiKey
         )
         .then(() => {
           setFormData({ name: "", email: "", message: "" });
@@ -59,9 +68,16 @@ const Contact = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Left Panel */}
         <div className="bg-gray-900 rounded-2xl p-6 border border-gray-800 shadow-2xl hover:border-blue-500/50 transition-all duration-300">
-          <h3 className="text-lg font-bold text-white mb-6 text-center">Contact Information</h3>
+          <h3 className="text-lg font-bold text-white mb-6 text-center">
+            Contact Information
+          </h3>
           <div className="space-y-4">
-            <a href="https://wa.me/919665542046" target="_blank" rel="noopener noreferrer" className="contact-link">
+            <a
+              href="https://wa.me/919665542046"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="contact-link"
+            >
               <Phone size={16} className="text-blue-400" />
               <span>+91-9665542046</span>
             </a>
@@ -69,11 +85,19 @@ const Contact = () => {
               <Mail size={16} className="text-blue-400" />
               <span>lawhares@gmail.com</span>
             </a>
-            <a href="https://www.linkedin.com/in/sudhanshu-lawhare" target="_blank" className="contact-link">
+            <a
+              href="https://www.linkedin.com/in/sudhanshu-lawhare"
+              target="_blank"
+              className="contact-link"
+            >
               <Linkedin size={16} className="text-blue-400" />
               <span>LinkedIn Profile</span>
             </a>
-            <a href="https://github.com/Shu-50" target="_blank" className="contact-link">
+            <a
+              href="https://github.com/Shu-50"
+              target="_blank"
+              className="contact-link"
+            >
               <Github size={16} className="text-blue-400" />
               <span>GitHub Profile</span>
             </a>
@@ -82,34 +106,44 @@ const Contact = () => {
 
         {/* Right Panel - Form */}
         <div className="bg-gray-900 rounded-2xl p-6 border border-gray-800 shadow-2xl hover:border-blue-500/50 transition-all duration-300">
-          <h3 className="text-lg font-bold text-white mb-6 text-center">Send Message</h3>
+          <h3 className="text-lg font-bold text-white mb-6 text-center">
+            Send Message
+          </h3>
           <form onSubmit={handleFormSubmit} className="space-y-4">
             <input
               type="text"
               placeholder="Your Name"
               value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, name: e.target.value })
+              }
               className="form-input"
             />
             <input
               type="email"
               placeholder="Your Email"
               value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
               className="form-input"
             />
             <textarea
               placeholder="Your Message"
               rows="4"
               value={formData.message}
-              onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, message: e.target.value })
+              }
               className="form-input resize-none"
             />
             <button
               type="submit"
               disabled={isSending}
               className={`w-full ${
-                isSending ? "bg-gray-600 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-600"
+                isSending
+                  ? "bg-gray-600 cursor-not-allowed"
+                  : "bg-blue-500 hover:bg-blue-600"
               } text-black font-semibold py-3 px-4 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 text-sm shadow-lg shadow-blue-500/50 hover:shadow-blue-500/70 neon-glow`}
             >
               <Send size={16} />
@@ -118,7 +152,6 @@ const Contact = () => {
           </form>
         </div>
       </div>
-
     </div>
   );
 };
