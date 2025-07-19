@@ -62,7 +62,7 @@ const Sidebar = ({ isMobile }) => {
             📍 Pimpri Chinchwad, Maharashtra
           </p>
           <p className="flex items-center justify-center gap-2">
-            🎓 CGPA: <span className="text-blue-400 font-semibold">8.78</span>
+            🎓 CGPA: <span className="text-blue-400 font-semibold">8.75</span>
           </p>
           <p className="flex items-center justify-center gap-2">
             📞 +91-9665542046
