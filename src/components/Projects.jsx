@@ -4,6 +4,15 @@ import { Code, ExternalLink } from "lucide-react";
 const Projects = () => {
   const projects = [
     {
+      title: "CampusCrush",
+      description:
+        "A college-focused dating and social interaction app using React Native (Expo) and Node.js/Express. Implemented a modern onboarding flow, secure login system, anonymous confession posting, category-based feeds, profile management, and swipe-based matchmaking. Developed reusable UI components, integrated image uploads, and prepared real-time chat and notifications for backend integration.",
+      tech: ["React Native", "Tailwind CSS", "Expo", "Android Development", "ReactJS", "Javascript", "MongoDB", "Node.js"],
+      sourceCode: "https://github.com/Shu-50/CampusCrush",
+      liveDemo: "https://github.com/Shu-50/CampusCrush",
+      image: "../campuscrash.webp",
+    },
+    {
       title: "Pokedex",
       description:
         "A comprehensive React application displaying information on over 10,000 Pokémon using the Poke API. Features search and generation filtering capabilities.",

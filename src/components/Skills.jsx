@@ -4,33 +4,51 @@ import { Star } from 'lucide-react';
 
 const Skills = () => {
   const skillsData = [
-    { category: 'Programming Languages', type: 'languages', 
-        skills: [ 
-            { name: 'JavaScript', level: 5 },
-             { name: 'Python', level: 5 },
-              { name: 'C++', level: 4 },
-               { name: 'Java', level: 3 }, 
-               { name: 'HTML', level: 6 }, 
-               { name: 'CSS', level: 6 } ] },
-    { category: 'Frameworks & Libraries', type: 'frameworks',
-         skills: [
-             { name: 'ReactJS', level: 5 }, 
-             { name: 'Tailwind CSS', level: 6 }, 
-             { name: 'NumPy', level: 4 }, 
-             { name: 'OpenCV', level: 4 }, 
-             { name: 'MediaPipe', level: 3 } ] },
-    { category: 'Tools & Technologies', type: 'tools',
-         skills: [
-             { name: 'MySQL', level: 3 },
-              { name: 'GoDot Engine', level: 4 }, 
-              { name: 'Git', level: 3.5 }, 
-              { name: 'UI/UX Design', level: 7 } ] },
-    { category: 'Creative Skills', type: 'creative', 
-        skills: [ 
-            { name: '2D Animation', level:4  }, 
-            { name: 'Photography', level: 5 }, 
-            { name: 'Digital Art', level: 6 }, 
-            { name: 'Video Editing', level: 4 } ] }
+    {
+      category: 'Programming Languages', type: 'languages',
+      skills: [
+        { name: 'JavaScript', level: 5 },
+        { name: 'TypeScript', level: 4 },
+        { name: 'Python', level: 5 },
+        { name: 'C++', level: 4 },
+        { name: 'Java', level: 3 },
+        { name: 'HTML', level: 6 },
+        { name: 'CSS', level: 6 }]
+    },
+    {
+      category: 'Frameworks & Libraries', type: 'frameworks',
+      skills: [
+        { name: 'ReactJS', level: 5 },
+        { name: 'React Native', level: 4 },
+        { name: 'Tailwind CSS', level: 6 },
+        { name: 'NumPy', level: 4 },
+        { name: 'OpenCV', level: 4 },
+        { name: 'MediaPipe', level: 3 }]
+    },
+    {
+      category: 'Backend & Databases', type: 'backend',
+      skills: [
+        { name: 'Node.js', level: 4 },
+        { name: 'Express.js', level: 4 },
+        { name: 'PostgreSQL', level: 4 },
+        { name: 'MongoDB', level: 4 },
+        { name: 'MySQL', level: 3 }]
+    },
+    {
+      category: 'Tools & Technologies', type: 'tools',
+      skills: [
+        { name: 'GoDot Engine', level: 4 },
+        { name: 'Git', level: 3.5 },
+        { name: 'UI/UX Design', level: 7 }]
+    },
+    {
+      category: 'Creative Skills', type: 'creative',
+      skills: [
+        { name: '2D Animation', level: 4 },
+        { name: 'Photography', level: 5 },
+        { name: 'Digital Art', level: 6 },
+        { name: 'Video Editing', level: 4 }]
+    }
   ];
 
   return (

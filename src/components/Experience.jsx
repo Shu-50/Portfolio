@@ -4,6 +4,24 @@ import { Briefcase, ExternalLink } from 'lucide-react';
 const experienceCategories = {
   Internships: [
     {
+      title: "Software Lead Developer",
+      company: "LiftupLabs | IT / Computers",
+      duration: "07 Nov, 2025 - 01 Jan, 2026",
+      description:
+        "LiftUpLabs is a full-stack event management platform designed to enable seamless event hosting and administration. The system includes event creation workflow supporting online, offline, and hybrid events with registration rules, prizes, FAQs, and contact details. A role-based access control system was implemented for Students, Professionals, Institutions, and Admins, ensuring secure and structured access to platform features. The platform features an advanced Admin Dashboard providing real-time analytics, user and event management, participant tracking, and admin-level event registrations. Scalable backend APIs, structured database schemas, and a responsive frontend were developed to deliver a reliable, user-friendly, and production-ready event hosting ecosystem. Payment gateway using Razorpay.",
+      skills: "Node.js, Responsive UI, REST APIs, ReactJS, Servers, TypeScript, Hono, Express, PostgreSQL/MySQL, Drizzle ORM, Javascript",
+      link: "https://liftuplabs.in"
+    },
+    {
+      title: "Web Developer",
+      company: "DIT | Education",
+      duration: "12 Mar, 2025 - 15 May, 2025",
+      description:
+        "Developed a scalable, role-based admission and counselling management system for Dr. D. Y. Patil Vidyapeeth (DYPDPU) to streamline first-year admissions across Engineering, Pharmacy, MBA, and Liberal Arts programs. Implemented a multi-stage counselling workflow covering Gate Registration, Desk-wise academic and facility counselling, domain specific guidance, and final admission approval. Designed role-based authentication with JWT, protected routes, and secure session handling. Created a unique student tracking system with automatic ID generation, entry/exit logs, and real-time desk progress. Enabled counsellors and admins to monitor students through a complete audit trail of counselling stages. Built an interactive UI using Tailwind CSS 4.0, Recharts for analytics, and smooth role-based dashboards. Impact: Digitized manual admission processes, reduced data errors, accelerated student handling, and provided real-time visibility to administrators across departments.",
+      skills: "MongoDB, NodeJS, Javascript, Tailwind CSS, ReactJS",
+      link: "#"
+    },
+    {
       title: "Web Development Intern",
       company: "Tech Octanet Services Pvt. Ltd.",
       duration: "Jan 2025 - Feb 2025",

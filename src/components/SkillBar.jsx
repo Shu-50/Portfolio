@@ -7,6 +7,8 @@ const SkillBar = ({ skill, level, category }) => {
         return "bg-blue-500";
       case "frameworks":
         return "bg-cyan-500";
+      case "backend":
+        return "bg-green-500";
       case "tools":
         return "bg-blue-400";
       case "creative":
@@ -24,6 +26,8 @@ const SkillBar = ({ skill, level, category }) => {
         return "shadow-blue-500/50";
       case "frameworks":
         return "shadow-cyan-500/50";
+      case "backend":
+        return "shadow-green-500/50";
       case "tools":
         return "shadow-blue-400/50";
       case "creative":
@@ -44,13 +48,12 @@ const SkillBar = ({ skill, level, category }) => {
             {[...Array(7)].map((_, index) => (
               <div
                 key={index}
-                className={`h-2 w-6 rounded-sm transition-all duration-300 ${
-                  index < level
-                    ? `${getColor(category)} ${getShadow(
-                        category
-                      )} shadow-md animate-pulse-subtle`
-                    : "bg-gray-700 border border-gray-600"
-                }`}
+                className={`h-2 w-6 rounded-sm transition-all duration-300 ${index < level
+                  ? `${getColor(category)} ${getShadow(
+                    category
+                  )} shadow-md animate-pulse-subtle`
+                  : "bg-gray-700 border border-gray-600"
+                  }`}
               />
             ))}
           </div>
