@@ -1,129 +1,143 @@
-
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { MapPin, GraduationCap, Phone, Mail, FileDown, Github, Linkedin, Instagram } from "lucide-react";
 import ModelViewer from "./ModelViewer";
+import { useContent } from "../context/ContentContext";
+import { Magnetic, SplitText, EASE } from "./ui/motion";
 
 const Sidebar = ({ isMobile }) => {
   const [modelLoaded, setModelLoaded] = useState(false);
+  const { content } = useContent();
+  const p = content.profile;
+
+  const socialLinks = [
+    { href: p.socials?.linkedin, title: "LinkedIn", icon: Linkedin, color: "text-sky-400" },
+    { href: p.socials?.github, title: "GitHub", icon: Github, color: "text-white" },
+    { href: p.socials?.instagram, title: "Instagram", icon: Instagram, color: "text-pink-400" },
+  ].filter((s) => s.href);
 
   return (
-    <div
-      className={`${
-        isMobile ? "w-full" : "w-[30%]"
-      } bg-black border-r border-gray-800 ${
-        isMobile ? "relative" : "fixed h-full"
-      } shadow-2xl`}
+    <aside
+      className={`w-full lg:w-[32%] lg:fixed lg:h-screen lg:overflow-y-auto z-40 glass-strong border-b lg:border-b-0 lg:border-r border-white/10`}
     >
-      <div className="mt-4 p-6 text-center">
-        {/* ✅ Mobile: Only show static image */}
-        {isMobile ? (
-          <div className="relative w-60 h-60 mx-auto mb-6 flex items-center justify-center">
-            {/* Blue glowing circle in background */}
-            <div className="w-48 h-48 rounded-full bg-gradient-to-br from-blue-400 to-cyan-400 shadow-lg shadow-blue-500/50 animate-pulse-glow z-0" />
+      <div className="p-6 sm:p-8 text-center">
+        {/* Avatar — 3D model on desktop, still image on phones (keeps mobile fast) */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.85 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, ease: EASE }}
+          className="relative w-44 h-44 sm:w-52 sm:h-52 mx-auto mb-6"
+        >
+          <div className="absolute inset-0 rounded-full bg-gradient-to-br from-sky-400 via-cyan-400 to-blue-500 animate-pulse-glow animate-gradient" />
+          <div className="absolute -inset-3 rounded-full border border-sky-400/20 animate-float" />
 
-            {/* Avatar image in front of the circle */}
+          {isMobile ? (
             <img
-              src="/avtar.webp"
-              alt="Avatar"
-              className="absolute -top-7 left-1/2 transform -translate-x-1/2 w-53  object-contain z-10"
+              src={p.avatar || "/avtar.webp"}
+              alt={p.name}
+              className="absolute inset-0 w-full h-full object-contain scale-110 -translate-y-3 z-10"
             />
-          </div>
-        ) : (
-          <>
-            <div className="relative w-60 h-60 mx-auto mb-6 rounded-full bg-gradient-to-br from-blue-400 to-cyan-400 shadow-lg shadow-blue-500/50 animate-pulse-glow overflow-hidden flex items-center justify-center">
-              {/* Desktop fallback before model loads */}
+          ) : (
+            <div className="absolute inset-0 rounded-full overflow-hidden">
               {!modelLoaded && (
-                <span className="text-8xl font-bold text-black z-10">LS</span>
+                <span className="absolute inset-0 flex items-center justify-center text-6xl font-bold text-black/80 z-10">
+                  LS
+                </span>
               )}
               <div
-                className={`absolute inset-0 transition-opacity duration-500 ${
+                className={`absolute inset-0 transition-opacity duration-700 ${
                   modelLoaded ? "opacity-100" : "opacity-0"
                 }`}
               >
                 <ModelViewer onLoaded={() => setModelLoaded(true)} />
               </div>
             </div>
-          </>
-        )}
+          )}
+        </motion.div>
 
-        <h1 className="text-3xl font-bold mb-2 text-white">
-          Lawhare Sudhanshu D.
+        <h1 className="text-2xl sm:text-3xl font-bold mb-2">
+          <SplitText text={p.name} className="text-gradient" delay={0.15} />
         </h1>
-        <p className="text-blue-400 mb-3 text-lg font-medium">
-          Computer Engineering Student
-        </p>
-        <p className="text-gray-400 text-sm leading-relaxed mb-4">
-          Passionate developer with expertise in React, UI/UX design, and
-          creative problem-solving. Currently pursuing Bachelor's in Computer
-          Engineering.
-        </p>
 
-        <div className="text-sm text-gray-400 space-y-2 bg-gray-900 p-3 rounded-lg border border-gray-800">
-          <p className="flex items-center justify-center gap-2">
-            📍 Pimpri Chinchwad, Maharashtra
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.6, duration: 0.6 }}
+          className="text-sky-400 mb-3 text-base sm:text-lg font-medium"
+        >
+          {p.title}
+        </motion.p>
+
+        <p className="text-gray-400 text-base leading-relaxed mb-5">{p.tagline}</p>
+
+        <div className="text-base text-gray-400 space-y-2.5 glass rounded-xl p-4 text-left">
+          <p className="flex items-center gap-2.5">
+            <MapPin size={15} className="text-sky-400 shrink-0" /> {p.location}
           </p>
-          <p className="flex items-center justify-center gap-2">
-            🎓 CGPA: <span className="text-blue-400 font-semibold">8.75</span>
+          <p className="flex items-center gap-2.5">
+            <GraduationCap size={15} className="text-sky-400 shrink-0" /> CGPA:{" "}
+            <span className="text-sky-400 font-semibold">{p.cgpa}</span>
           </p>
-          <p className="flex items-center justify-center gap-2">
-            📞 +91-9665542046
-          </p>
-          <p className="flex items-center justify-center gap-2">
-            ✉️ lawhares@gmail.com
-          </p>
+          <a href={`tel:${p.phone}`} className="flex items-center gap-2.5 hover:text-sky-400 transition-colors">
+            <Phone size={15} className="text-sky-400 shrink-0" /> {p.phone}
+          </a>
+          <a
+            href={`mailto:${p.email}`}
+            className="flex items-center gap-2.5 hover:text-sky-400 transition-colors break-all"
+          >
+            <Mail size={15} className="text-sky-400 shrink-0" /> {p.email}
+          </a>
         </div>
 
-        <div className="mt-6 flex justify-center gap-5 items-center group">
-          <a
-            href="https://www.linkedin.com/in/sudhanshu-lawhare"
-            target="_blank"
-            rel="noopener noreferrer"
-            title="LinkedIn"
-            className="text-blue-400 group-hover:grayscale hover:grayscale-0 transition transform hover:scale-110 text-2xl"
-          >
-            <i className="fab fa-linkedin-in"></i>
-          </a>
-          <a
-            href="https://github.com/Shu-50"
-            target="_blank"
-            rel="noopener noreferrer"
-            title="GitHub"
-            className="text-white group-hover:grayscale hover:grayscale-0 transition transform hover:scale-110 text-2xl"
-          >
-            <i className="fab fa-github"></i>
-          </a>
-          <a
-            href="https://www.geeksforgeeks.org/user/shu05/"
-            target="_blank"
-            rel="noopener noreferrer"
-            title="GeeksforGeeks"
-            className="group-hover:grayscale hover:grayscale-0 transition transform hover:scale-110"
-          >
-            <img
-              src="https://upload.wikimedia.org/wikipedia/commons/4/43/GeeksforGeeks.svg"
-              alt="GFG"
-              className="w-6 h-6"
-            />
-          </a>
-          <a
-            href="https://www.instagram.com/su.dhansh.u/"
-            target="_blank"
-            rel="noopener noreferrer"
-            title="Instagram"
-            className="text-pink-500 group-hover:grayscale hover:grayscale-0 transition transform hover:scale-110 text-2xl"
-          >
-            <i className="fab fa-instagram"></i>
-          </a>
-          <a
-            href="/Resume.pdf"
-            download
-            title="Download Resume"
-            className="text-sm bg-blue-500 hover:bg-blue-600 text-black font-semibold py-2 px-4 rounded-lg transition-all duration-300 shadow-lg shadow-blue-500/50 hover:shadow-blue-500/70 neon-glow ml-3"
-          >
-            Resume
-          </a>
+        <div className="mt-6 flex flex-wrap justify-center gap-3 items-center">
+          {socialLinks.map(({ href, title, icon: Icon, color }) => (
+            <Magnetic key={title}>
+              <a
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={title}
+                aria-label={title}
+                className={`flex items-center justify-center w-10 h-10 rounded-lg glass ${color} hover:border-sky-400/50 hover:scale-110 transition-all duration-300`}
+              >
+                <Icon size={19} />
+              </a>
+            </Magnetic>
+          ))}
+
+          {p.socials?.gfg && (
+            <Magnetic>
+              <a
+                href={p.socials.gfg}
+                target="_blank"
+                rel="noopener noreferrer"
+                title="GeeksforGeeks"
+                aria-label="GeeksforGeeks"
+                className="flex items-center justify-center w-10 h-10 rounded-lg glass hover:border-sky-400/50 hover:scale-110 transition-all duration-300"
+              >
+                <img
+                  src="https://upload.wikimedia.org/wikipedia/commons/4/43/GeeksforGeeks.svg"
+                  alt=""
+                  className="w-5 h-5"
+                />
+              </a>
+            </Magnetic>
+          )}
+
+          <Magnetic>
+            <a
+              href={p.resumeUrl || "/Resume.pdf"}
+              download={p.resumeFileName || "Resume.pdf"}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-sm bg-gradient-to-r from-sky-500 to-cyan-500 hover:from-sky-400 hover:to-cyan-400 text-black font-semibold py-2.5 px-4 rounded-lg transition-all duration-300 neon-glow"
+            >
+              <FileDown size={16} /> Resume
+            </a>
+          </Magnetic>
         </div>
       </div>
-    </div>
+    </aside>
   );
 };
 

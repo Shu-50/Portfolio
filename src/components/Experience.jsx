@@ -1,110 +1,167 @@
-import React from 'react';
-import { Briefcase, ExternalLink } from 'lucide-react';
+import React, { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { Briefcase, ExternalLink, Calendar, Users, Heart } from "lucide-react";
+import SectionHeader from "./ui/SectionHeader";
+import { useContent } from "../context/ContentContext";
+import { RevealGroup, RevealItem, EASE } from "./ui/motion";
 
-const experienceCategories = {
-  Internships: [
-    {
-      title: "Software Lead Developer",
-      company: "LiftupLabs | IT / Computers",
-      duration: "07 Nov, 2025 - 01 Jan, 2026",
-      description:
-        "LiftUpLabs is a full-stack event management platform designed to enable seamless event hosting and administration. The system includes event creation workflow supporting online, offline, and hybrid events with registration rules, prizes, FAQs, and contact details. A role-based access control system was implemented for Students, Professionals, Institutions, and Admins, ensuring secure and structured access to platform features. The platform features an advanced Admin Dashboard providing real-time analytics, user and event management, participant tracking, and admin-level event registrations. Scalable backend APIs, structured database schemas, and a responsive frontend were developed to deliver a reliable, user-friendly, and production-ready event hosting ecosystem. Payment gateway using Razorpay.",
-      skills: "Node.js, Responsive UI, REST APIs, ReactJS, Servers, TypeScript, Hono, Express, PostgreSQL/MySQL, Drizzle ORM, Javascript",
-      link: "https://liftuplabs.in"
-    },
-    {
-      title: "Web Developer",
-      company: "DIT | Education",
-      duration: "12 Mar, 2025 - 15 May, 2025",
-      description:
-        "Developed a scalable, role-based admission and counselling management system for Dr. D. Y. Patil Vidyapeeth (DYPDPU) to streamline first-year admissions across Engineering, Pharmacy, MBA, and Liberal Arts programs. Implemented a multi-stage counselling workflow covering Gate Registration, Desk-wise academic and facility counselling, domain specific guidance, and final admission approval. Designed role-based authentication with JWT, protected routes, and secure session handling. Created a unique student tracking system with automatic ID generation, entry/exit logs, and real-time desk progress. Enabled counsellors and admins to monitor students through a complete audit trail of counselling stages. Built an interactive UI using Tailwind CSS 4.0, Recharts for analytics, and smooth role-based dashboards. Impact: Digitized manual admission processes, reduced data errors, accelerated student handling, and provided real-time visibility to administrators across departments.",
-      skills: "MongoDB, NodeJS, Javascript, Tailwind CSS, ReactJS",
-      link: "#"
-    },
-    {
-      title: "Web Development Intern",
-      company: "Tech Octanet Services Pvt. Ltd.",
-      duration: "Jan 2025 - Feb 2025",
-      description:
-        "Completed a Web Development Internship where I gained real-world experience, improved my problem-solving skills, and learned the importance of teamwork and professional ethics. Worked on practical web-based projects throughout the journey.",
-      link: "https://www.linkedin.com/posts/sudhanshu-lawhare_webdevelopment-internship-frontenddevelopment-activity-7296059056148897792-N4Iw?utm_source=share&utm_medium=member_desktop"
-    },
-    {
-      title: "Front-End Development Intern",
-      company: "CodexIntern",
-      duration: "Feb 2024 - Mar 2024",
-      description:
-        "Built responsive and user-friendly web apps using React.js, JavaScript, HTML, and CSS. Gained hands-on experience with real-world front-end projects and enhanced my UI skills with modern frameworks.",
-      link: "https://www.linkedin.com/posts/sudhanshu-lawhare_frontenddevelopment-internship-reactjs-activity-7293132010728910848-5eyo?utm_source=share&utm_medium=member_desktop"
-    }
-  ],
-  Club: [
-    {
-      title: "Content Creator",
-      company: "ACES Club - Association of Computer Engineering Students",
-      duration: "2023 - 2024",
-      description:
-        "Creating engaging content for the computer engineering community, managing social media presence, and documenting club activities.",
-      link: "https://www.linkedin.com/posts/sudhanshu-lawhare_aces-associationofcomputerengineeringstudent-activity-7114219971366273025-qXiX?utm_source=share&utm_medium=member_desktop"
-    }
-  ],
-  Volunteering: [
-    {
-      title: "Event Volunteer",
-      company: "ACUNITEX EVENT",
-      duration: "2023",
-      description:
-        "Provided creative suggestions and captured events through photography and videography. Also worked on props, 3D structure models, and crafts.",
-      link: "https://example.com/acunitex"
-    }
-  ]
+const TAB_ICONS = { Internships: Briefcase, Club: Users, Volunteering: Heart };
+
+// Postgres jsonb does not preserve key order, so pin the tab order here.
+// Unknown (user-added) groups keep their stored position after these.
+const TAB_ORDER = ["Internships", "Club", "Volunteering"];
+const sortTabs = (keys) =>
+  [...keys].sort((a, b) => {
+    const ia = TAB_ORDER.indexOf(a);
+    const ib = TAB_ORDER.indexOf(b);
+    return (ia === -1 ? TAB_ORDER.length : ia) - (ib === -1 ? TAB_ORDER.length : ib);
+  });
+
+const ExperienceCard = ({ exp }) => {
+  const [expanded, setExpanded] = useState(false);
+  const long = (exp.description || "").length > 300;
+  const skills = (exp.skills || "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+
+  return (
+    <div className="relative">
+      {/* Timeline node */}
+      <span className="absolute -left-[30px] sm:-left-[38px] top-6 w-4 h-4 rounded-full bg-gradient-to-br from-sky-400 to-cyan-400 ring-4 ring-sky-400/15" />
+
+      <div className="glass rounded-2xl p-5 sm:p-6 card-glow">
+        <div className="flex flex-wrap items-start justify-between gap-2 mb-1">
+          <h3 className="text-lg sm:text-xl font-bold text-white">{exp.title}</h3>
+          {exp.duration && (
+            <span className="flex items-center gap-1.5 text-xs text-gray-400 bg-white/[0.04] border border-white/10 px-2.5 py-1 rounded-full shrink-0">
+              <Calendar size={13} className="text-sky-400" />
+              {exp.duration}
+            </span>
+          )}
+        </div>
+
+        <p className="text-sky-400 font-semibold mb-3 text-base">{exp.company}</p>
+
+        <p
+          className={`text-gray-300 leading-relaxed text-base ${
+            !expanded && long ? "line-clamp-5" : ""
+          }`}
+        >
+          {exp.description}
+        </p>
+
+        {long && (
+          <button
+            onClick={() => setExpanded((v) => !v)}
+            className="mt-2 text-sm text-sky-400 hover:text-cyan-300 font-medium"
+          >
+            {expanded ? "Show less" : "Read more"}
+          </button>
+        )}
+
+        {skills.length > 0 && (
+          <div className="flex flex-wrap gap-1.5 mt-4">
+            {skills.map((s, i) => (
+              <span
+                key={i}
+                className="bg-white/[0.04] text-cyan-300 px-2.5 py-1 rounded-full text-xs border border-white/10"
+              >
+                {s}
+              </span>
+            ))}
+          </div>
+        )}
+
+        {exp.link && (
+          <a
+            href={exp.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 mt-4 text-sky-400 hover:text-cyan-300 transition-colors text-base font-medium"
+          >
+            <ExternalLink size={16} /> View More
+          </a>
+        )}
+      </div>
+    </div>
+  );
 };
 
 const Experience = () => {
-  return (
-    <div className="space-y-10 animate-fadeIn">
-      <h2 className="text-2xl font-bold text-white mb-2 flex items-center gap-2">
-        <Briefcase className="text-blue-400" size={24} />
-        Experience
-      </h2>
+  const { content } = useContent();
+  const groups = content.experience || {};
+  const tabs = sortTabs(Object.keys(groups)); // "Internships" first → default tab
+  const [selected, setSelected] = useState(null);
+  const active = selected && groups[selected] ? selected : tabs[0];
+  const list = groups[active] || [];
 
-      {Object.entries(experienceCategories).map(([category, experiences]) => (
-        <div key={category}>
-          <h3 className="flex justify-end mr-5 text-2xl text-blue-300 font-semibold mb-4 border-b border-blue-500/30 pb-1">
-            {category}
-          </h3>
-          <div className="space-y-4">
-            {experiences.map((exp, i) => (
-              <div
-                key={i}
-                className="bg-gray-900 rounded-2xl p-6 border border-gray-800 shadow-2xl hover:border-blue-500/50 transition-all duration-300 hover:shadow-blue-500/20"
+  return (
+    <div className="space-y-6">
+      <SectionHeader
+        icon={Briefcase}
+        title="Experience"
+        subtitle="Internships, clubs and volunteering"
+      />
+
+      {/* Sub-tabs */}
+      <div className="flex flex-wrap gap-2">
+        {tabs.map((name) => {
+          const Icon = TAB_ICONS[name] || Briefcase;
+          const isActive = active === name;
+          return (
+            <button
+              key={name}
+              onClick={() => setSelected(name)}
+              className={`relative flex items-center gap-2 px-4 py-2 rounded-full text-sm sm:text-base transition-colors duration-300 border ${
+                isActive
+                  ? "text-black border-sky-300 font-semibold"
+                  : "text-gray-300 border-white/10 hover:border-sky-500/50 hover:text-sky-400"
+              }`}
+            >
+              {isActive && (
+                <motion.span
+                  layoutId="exp-tab-pill"
+                  transition={{ type: "spring", stiffness: 400, damping: 34 }}
+                  className="absolute inset-0 rounded-full bg-gradient-to-r from-sky-400 to-cyan-400"
+                />
+              )}
+              <Icon size={16} className="relative z-10" />
+              <span className="relative z-10">{name}</span>
+              <span
+                className={`relative z-10 text-xs px-1.5 py-0.5 rounded-full ${
+                  isActive ? "bg-black/15" : "bg-white/10"
+                }`}
               >
-                <div className="flex items-start gap-4">
-                  <div className="bg-blue-500 p-3 rounded-full shadow-lg shadow-blue-500/50 animate-pulse-glow">
-                    <Briefcase className="text-black" size={20} />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="text-lg font-bold text-white mb-1">{exp.title}</h3>
-                    <p className="text-blue-400 font-semibold mb-1 text-sm">{exp.company}</p>
-                    <p className="text-gray-400 text-xs mb-3 bg-gray-800 px-2 py-1 rounded inline-block">{exp.duration}</p>
-                    <p className="text-gray-300 leading-relaxed text-sm mb-2">{exp.description}</p>
-                    {exp.link && (
-                      <a
-                        href={exp.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-blue-400 hover:text-cyan-400 transition-colors text-sm font-medium"
-                      >
-                        <ExternalLink size={16} /> View More
-                      </a>
-                    )}
-                  </div>
-                </div>
-              </div>
+                {(groups[name] || []).length}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={active}
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -8 }}
+          transition={{ duration: 0.3, ease: EASE }}
+        >
+          <RevealGroup className="relative space-y-5 pl-[30px] sm:pl-[38px]" stagger={0.07}>
+            <span className="absolute left-[7px] top-4 bottom-4 w-px bg-gradient-to-b from-sky-400 via-cyan-500/40 to-transparent" />
+            {list.map((exp, i) => (
+              <RevealItem key={`${active}-${i}`}>
+                <ExperienceCard exp={exp} />
+              </RevealItem>
             ))}
-          </div>
-        </div>
-      ))}
+          </RevealGroup>
+
+          {list.length === 0 && (
+            <p className="text-center text-gray-500 py-10">Nothing here yet.</p>
+          )}
+        </motion.div>
+      </AnimatePresence>
     </div>
   );
 };

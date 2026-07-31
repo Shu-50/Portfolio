@@ -1,14 +1,17 @@
-import {
-  Mail,
-  User,
-  Code,
-  Award,
-  Briefcase,
-  Star,
-  Menu,
-  X,
-  FileDown,
-} from "lucide-react";
+import React from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { Mail, User, Code, Award, Briefcase, Star, Menu, X, FileDown } from "lucide-react";
+import { useContent } from "../context/ContentContext";
+import { EASE } from "./ui/motion";
+
+const navItems = [
+  { id: "about", label: "About", icon: User },
+  { id: "skills", label: "Skills", icon: Star },
+  { id: "projects", label: "Projects", icon: Code },
+  { id: "certificates", label: "Certificates", icon: Award },
+  { id: "experience", label: "Experience", icon: Briefcase },
+  { id: "contact", label: "Contact", icon: Mail },
+];
 
 const Navigation = ({
   activeSection,
@@ -17,92 +20,109 @@ const Navigation = ({
   mobileMenuOpen,
   setMobileMenuOpen,
 }) => {
-  const navItems = [
-    { id: "about", label: "About", icon: User },
-    { id: "skills", label: "Skills", icon: Star },
-    { id: "projects", label: "Projects", icon: Code },
-    { id: "certificates", label: "Certificates", icon: Award },
-    { id: "experience", label: "Experience", icon: Briefcase },
-    { id: "contact", label: "Contact", icon: Mail },
-  ];
+  const { content } = useContent();
+  const resumeUrl = content.profile.resumeUrl || "/Resume.pdf";
+  const resumeName = content.profile.resumeFileName || "Resume.pdf";
 
   return (
-    <nav className="bg-gray-950 border-b border-gray-800 sticky top-0 z-50 shadow-lg">
-      <div className="px-6 py-3 flex justify-between items-center flex-wrap">
-        {/* Left Side */}
+    <nav className="glass-strong sticky top-0 z-50 border-b border-white/10">
+      <div className="px-4 sm:px-6 py-3 flex justify-between items-center gap-3">
         {isMobile ? (
-          <div className="flex justify-between items-center w-full">
-            <h2 className="text-lg font-bold text-blue-400">Portfolio</h2>
+          <>
+            <span className="text-base font-bold text-gradient tracking-wide">
+              {navItems.find((n) => n.id === activeSection)?.label || "Portfolio"}
+            </span>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="text-white hover:text-blue-400 transition-colors"
+              aria-label="Toggle menu"
+              aria-expanded={mobileMenuOpen}
+              className="p-2 -mr-2 text-white hover:text-sky-400 transition-colors"
             >
-              {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+              {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
-          </div>
+          </>
         ) : (
-          <div className="flex space-x-1 flex-wrap">
-            {navItems.map(({ id, label, icon: Icon }) => (
-              <button
-                key={id}
-                onClick={() => setActiveSection(id)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 text-lg border ${
-                  activeSection === id
-                    ? "bg-blue-500 text-black border-blue-400 shadow-lg shadow-blue-500/50 neon-glow"
-                    : "text-gray-300 hover:text-blue-400 hover:bg-gray-800 border-transparent hover:border-gray-700"
-                }`}
-              >
-                <Icon size={22} />
-                {label}
-              </button>
-            ))}
-          </div>
-        )}
+          <>
+            <div className="flex gap-1 flex-wrap">
+              {navItems.map(({ id, label, icon: Icon }) => {
+                const active = activeSection === id;
+                return (
+                  <button
+                    key={id}
+                    onClick={() => setActiveSection(id)}
+                    className={`relative flex items-center gap-2 px-3.5 py-2 rounded-lg transition-colors duration-300 text-sm xl:text-base ${
+                      active ? "text-black" : "text-gray-300 hover:text-sky-400"
+                    }`}
+                  >
+                    {active && (
+                      <motion.span
+                        layoutId="nav-pill"
+                        transition={{ type: "spring", stiffness: 380, damping: 32 }}
+                        className="absolute inset-0 rounded-lg bg-gradient-to-r from-sky-400 to-cyan-400 neon-glow"
+                      />
+                    )}
+                    <Icon size={18} className="relative z-10" />
+                    <span className="relative z-10 font-medium">{label}</span>
+                  </button>
+                );
+              })}
+            </div>
 
-        {/* Right Side Resume Button (Only for Desktop) */}
-        {!isMobile && (
-          <a
-            href="/Resume.pdf"
-            download="Sudhanshu_Resume.pdf"
-            className="ml-auto flex items-center gap-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-black font-semibold rounded-lg transition-all duration-300 shadow-lg shadow-blue-500/50 hover:shadow-blue-500/70"
-          >
-            <FileDown size={20} />
-            Resume
-          </a>
+            <a
+              href={resumeUrl}
+              download={resumeName}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="shrink-0 flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-sky-500 to-cyan-500 hover:from-sky-400 hover:to-cyan-400 text-black font-semibold rounded-lg transition-all duration-300 neon-glow text-sm"
+            >
+              <FileDown size={18} />
+              Resume
+            </a>
+          </>
         )}
       </div>
 
-      {/* Mobile Dropdown */}
-      {isMobile && mobileMenuOpen && (
-        <div className="mt-3 space-y-1 bg-gray-800 p-3 rounded-lg border border-gray-700">
-          {navItems.map(({ id, label, icon: Icon }) => (
-            <button
-              key={id}
-              onClick={() => {
-                setActiveSection(id);
-                setMobileMenuOpen(false);
-              }}
-              className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-300 text-sm border ${
-                activeSection === id
-                  ? "bg-blue-500 text-black border-blue-400 shadow-lg shadow-blue-500/50"
-                  : "text-gray-300 hover:text-blue-400 hover:bg-gray-700 border-transparent hover:border-gray-600"
-              }`}
-            >
-              <Icon size={20} />
-              {label}
-            </button>
-          ))}
-          {/* Mobile Resume Button */}
-          <a
-            href="/Resume.pdf"
-            download="Sudhanshu_Resume.pdf"
-            className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-blue-500 hover:bg-blue-600 text-black font-semibold rounded-lg transition-all duration-300 text-sm shadow-lg shadow-blue-500/50 hover:shadow-blue-500/70"
+      <AnimatePresence>
+        {isMobile && mobileMenuOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: EASE }}
+            className="overflow-hidden border-t border-white/10"
           >
-            <FileDown size={16} />
-            Resume
-          </a>
-        </div>
-      )}
+            <div className="p-3 grid grid-cols-2 gap-2">
+              {navItems.map(({ id, label, icon: Icon }) => (
+                <button
+                  key={id}
+                  onClick={() => {
+                    setActiveSection(id);
+                    setMobileMenuOpen(false);
+                  }}
+                  className={`flex items-center gap-2 px-3 py-2.5 rounded-lg transition-all duration-300 text-sm border ${
+                    activeSection === id
+                      ? "bg-gradient-to-r from-sky-400 to-cyan-400 text-black border-sky-300 font-semibold"
+                      : "text-gray-300 border-white/10 hover:border-sky-500/40 hover:text-sky-400"
+                  }`}
+                >
+                  <Icon size={17} />
+                  {label}
+                </button>
+              ))}
+              <a
+                href={resumeUrl}
+                download={resumeName}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="col-span-2 flex items-center justify-center gap-2 px-3 py-2.5 bg-gradient-to-r from-sky-500 to-cyan-500 text-black font-semibold rounded-lg text-sm"
+              >
+                <FileDown size={16} />
+                Download Resume
+              </a>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 };

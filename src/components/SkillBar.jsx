@@ -1,64 +1,51 @@
-import skillIcons from "./skillIcons";
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import skillIcons, { FALLBACK_ICON } from "./skillIcons";
 
-const SkillBar = ({ skill, level, category }) => {
-  const getColor = (category) => {
-    switch (category) {
-      case "languages":
-        return "bg-blue-500";
-      case "frameworks":
-        return "bg-cyan-500";
-      case "backend":
-        return "bg-green-500";
-      case "tools":
-        return "bg-blue-400";
-      case "creative":
-        return "bg-cyan-400";
-      default:
-        return "bg-gray-500";
-    }
-  };
+const MAX_LEVEL = 7;
 
-  const iconUrl = skillIcons[skill];
+const PALETTE = {
+  languages: "from-sky-500 to-sky-300",
+  frameworks: "from-cyan-500 to-cyan-300",
+  backend: "from-emerald-500 to-emerald-300",
+  tools: "from-blue-500 to-blue-300",
+  creative: "from-fuchsia-500 to-pink-300",
+  default: "from-gray-500 to-gray-300",
+};
 
-  const getShadow = (category) => {
-    switch (category) {
-      case "languages":
-        return "shadow-blue-500/50";
-      case "frameworks":
-        return "shadow-cyan-500/50";
-      case "backend":
-        return "shadow-green-500/50";
-      case "tools":
-        return "shadow-blue-400/50";
-      case "creative":
-        return "shadow-cyan-400/50";
-      default:
-        return "shadow-gray-500/50";
-    }
-  };
+const SkillBar = ({ skill, level, category, index = 0 }) => {
+  const [broken, setBroken] = useState(false);
+  const gradient = PALETTE[category] || PALETTE.default;
+  const pct = (Math.max(0, Math.min(MAX_LEVEL, Number(level) || 0)) / MAX_LEVEL) * 100;
+  const iconUrl = broken ? FALLBACK_ICON : skillIcons[skill] || FALLBACK_ICON;
 
   return (
-    <div className="mb-4">
-      <div className="flex items-center justify-between">
-        <section>
-          <div className="flex justify-between items-center mb-2">
-            <span className="text-white text-sm font-medium">{skill}</span>
-          </div>
-          <div className="flex gap-1">
-            {[...Array(7)].map((_, index) => (
-              <div
-                key={index}
-                className={`h-2 w-6 rounded-sm transition-all duration-300 ${index < level
-                  ? `${getColor(category)} ${getShadow(
-                    category
-                  )} shadow-md animate-pulse-subtle`
-                  : "bg-gray-700 border border-gray-600"
-                  }`}
-              />
-            ))}
-          </div>
-        </section>
-        <img src={iconUrl} alt={skill} className="w-7 h-7 mr-2  inline-block" />
+    <div className="group flex items-center gap-3 py-3">
+      <img
+        src={iconUrl}
+        alt=""
+        loading="lazy"
+        onError={() => setBroken(true)}
+        className="w-8 h-8 shrink-0 object-contain transition-transform duration-300 group-hover:scale-110"
+      />
+
+      <div className="flex-1 min-w-0">
+        <span className="block text-white text-base font-medium truncate mb-1.5 group-hover:text-sky-300 transition-colors">
+          {skill}
+        </span>
+
+        {/* One transform-animated fill — cheap to paint, smooth to reveal.
+            Animates on mount (the section remounts per tab visit); whileInView
+            can't observe this element because it starts at zero width. */}
+        <div className="h-2.5 rounded-full bg-white/5 border border-white/10 overflow-hidden">
+          <motion.div
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ duration: 0.8, delay: 0.15 + index * 0.05, ease: [0.22, 1, 0.36, 1] }}
+            style={{ width: `${pct}%`, transformOrigin: "left" }}
+            className={`h-full rounded-full bg-gradient-to-r ${gradient}`}
+          />
+        </div>
       </div>
     </div>
   );

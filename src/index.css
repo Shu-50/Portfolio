@@ -1,81 +1,184 @@
 @import "tailwindcss";
 
-
-
-.animate-fadeIn {
-  animation: fadeIn 0.6s ease-out;
+:root {
+  --accent: 56, 189, 248;      /* sky-400  */
+  --accent-2: 34, 211, 238;    /* cyan-400 */
+  --ink: 3, 7, 18;             /* gray-950 */
 }
 
-.animate-pulse-glow {
-  animation: pulseGlow 2s ease-in-out infinite;
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  /* Tailwind sizes are rem-based, so this raises every text size on the site. */
+  font-size: 16.5px;
+}
+
+body {
+  background-color: rgb(var(--ink));
+  overflow-x: hidden;
+}
+
+/* Never let a long unbroken URL or tech tag blow out the mobile layout. */
+p, h1, h2, h3, h4, span, a {
+  overflow-wrap: anywhere;
+}
+
+/* ---------- animation utilities ---------- */
+
+.animate-fadeIn { animation: fadeIn 0.6s ease-out both; }
+.animate-pulse-glow { animation: pulseGlow 2s ease-in-out infinite; }
+.animate-float { animation: float 6s ease-in-out infinite; }
+.animate-shimmer { animation: shimmer 2.4s linear infinite; }
+.animate-gradient {
+  background-size: 220% 220%;
+  animation: gradientShift 8s ease infinite;
 }
 
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes pulseGlow {
-  0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.5); }
-  50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.8), 0 0 60px rgba(59, 130, 246, 0.4); }
+  0%, 100% { box-shadow: 0 0 20px rgba(var(--accent), 0.45); }
+  50%      { box-shadow: 0 0 40px rgba(var(--accent), 0.75), 0 0 60px rgba(var(--accent), 0.35); }
 }
 
-/* Neon Glow Effect */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-10px); }
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
+}
+
+@keyframes shimmer {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+
+/* ---------- surfaces ---------- */
+
+/*
+ * No backdrop-filter here on purpose: dozens of blurred cards forced a huge
+ * repaint on every scroll frame. A translucent solid reads almost the same
+ * and scrolls at full speed.
+ */
+.glass {
+  background: rgba(11, 17, 32, 0.82);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+/* Blur only on the two fixed surfaces (nav + sidebar), where it's cheap. */
+.glass-strong {
+  background: rgba(3, 7, 18, 0.88);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+}
+
+.tilt-card {
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Animated gradient hairline that lights up on hover. */
+.card-glow {
+  position: relative;
+  transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+}
+.card-glow::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(130deg, rgba(var(--accent), 0.7), transparent 40%, rgba(var(--accent-2), 0.6));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+.card-glow:hover::after { opacity: 1; }
+.card-glow:hover {
+  box-shadow: 0 12px 40px -12px rgba(var(--accent), 0.35);
+}
+
 .neon-glow {
-  box-shadow: 0 0 10px rgba(59, 130, 246, 0.5),
-              0 0 20px rgba(59, 130, 246, 0.3),
-              0 0 30px rgba(59, 130, 246, 0.1);
+  box-shadow:
+    0 0 10px rgba(var(--accent), 0.5),
+    0 0 20px rgba(var(--accent), 0.3),
+    0 0 30px rgba(var(--accent), 0.12);
 }
 
-/* Scrollbar Styles */
-::-webkit-scrollbar {
-  width: 8px;
+.text-gradient {
+  background: linear-gradient(100deg, #7dd3fc, #22d3ee, #60a5fa);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
-::-webkit-scrollbar-track {
-  background: #1f2937;
-  border-radius: 4px;
-}
+
+/* ---------- scrollbar ---------- */
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: #0b1220; border-radius: 4px; }
 ::-webkit-scrollbar-thumb {
   background: linear-gradient(to bottom, #3b82f6, #06b6d4);
   border-radius: 4px;
-  box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
 }
-::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(to bottom, #2563eb, #0891b2);
-}
+::-webkit-scrollbar-thumb:hover { background: linear-gradient(to bottom, #2563eb, #0891b2); }
 
-/* === Contact Component Styles === */
+/* ---------- contact / form ---------- */
 
 .contact-link {
   display: flex;
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem;
-  background-color: #1f2937;
+  background-color: rgba(31, 41, 55, 0.6);
   color: #d1d5db;
   border: 1px solid #374151;
   border-radius: 0.5rem;
   font-size: 0.875rem;
   transition: all 0.3s;
 }
-
 .contact-link:hover {
   color: #60a5fa;
   border-color: #3b82f6;
+  transform: translateX(4px);
 }
 
 .form-input {
   width: 100%;
-  background-color: #1f2937;
+  background-color: rgba(17, 24, 39, 0.8);
   border: 1px solid #374151;
   border-radius: 0.5rem;
   padding: 0.75rem 1rem;
   color: white;
   font-size: 0.875rem;
-  transition: border 0.3s;
+  transition: border 0.3s, box-shadow 0.3s;
 }
-
 .form-input:focus {
   outline: none;
   border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.18);
+}
+.form-input::placeholder { color: #6b7280; }
+
+/* Textareas and inputs on iOS zoom the page below 16px — keep them at 16px on small screens. */
+@media (max-width: 640px) {
+  .form-input { font-size: 16px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

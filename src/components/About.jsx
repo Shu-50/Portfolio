@@ -1,205 +1,153 @@
+import React, { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { User, Award, Images, X } from "lucide-react";
+import { useContent } from "../context/ContentContext";
+import SectionHeader from "./ui/SectionHeader";
+import { Reveal, RevealGroup, RevealItem, TiltCard, EASE } from "./ui/motion";
 
-import React from "react";
-import { User, Award } from "lucide-react";
-
-const PhotoStack = () => {
-  const images = [
-    "/gallery/0.jpg",
-    "/gallery/1.jpg",
-    "/gallery/2.jpg",
-    "/gallery/3.jpg",
-    "/gallery/4.jpg",
-    "/gallery/5.jpg",
-    "/gallery/6.jpg",
-  ];
+/**
+ * Masonry gallery via CSS columns. Every image keeps its own aspect ratio —
+ * nothing is cropped; portrait, landscape and square photos just stack.
+ */
+const Gallery = ({ images, onOpen }) => {
+  if (!images?.length) return null;
 
   return (
-    <div className="w-full max-w-5xl mx-auto">
-      {/* Desktop Layout - 3 columns */}
-      <div className="hidden md:grid grid-cols-3 gap-4">
-        {/* Image 1 - spans 3 rows */}
-        <img
-          src={images[1]}
-          alt="img1"
-          className="w-full h-full object-cover rounded-xl border-2 border-white shadow-lg row-span-3 transition-all duration-300 hover:scale-105 hover:border-blue-400 hover:shadow-2xl cursor-pointer"
-        />
-
-        {/* Image 2 - spans 3 rows */}
-        <img
-          src={images[2]}
-          alt="img2"
-          className="w-full h-full object-cover rounded-xl border-2 border-white shadow-lg row-span-3 transition-all duration-300 hover:scale-105 hover:border-blue-400 hover:shadow-2xl cursor-pointer"
-        />
-
-        {/* Row 1 → Image 4 */}
-        <img
-          src={images[3]}
-          alt="img4"
-          className="w-full h-full object-cover rounded-xl border-2 border-white shadow-lg transition-all duration-300 hover:scale-105 hover:border-blue-400 hover:shadow-2xl cursor-pointer"
-        />
-
-        {/* Row 2 → Image 5 */}
-        <img
-          src={images[5]}
-          alt="img5"
-          className="w-full h-full object-cover rounded-xl border-2 border-white shadow-lg transition-all duration-300 hover:scale-105 hover:border-blue-400 hover:shadow-2xl cursor-pointer"
-        />
-
-        {/* Row 3 → Image 6 */}
-        <img
-          src={images[6]}
-          alt="img6"
-          className="w-full h-full object-cover rounded-xl border-2 border-white shadow-lg transition-all duration-300 hover:scale-105 hover:border-blue-400 hover:shadow-2xl cursor-pointer"
-        />
-
-        {/* Row 4 → Image 0 spanning 2 cols */}
-        <img
-          src={images[0]}
-          alt="img0"
-          className="w-full h-full object-cover rounded-xl border-2 border-white shadow-lg col-span-2 transition-all duration-300 hover:scale-105 hover:border-blue-400 hover:shadow-2xl cursor-pointer"
-        />
-
-        {/* Row 4 → Image 3 */}
-        <img
-          src={images[4]}
-          alt="img3"
-          className="w-full h-full object-cover rounded-xl border-2 border-white shadow-lg transition-all duration-300 hover:scale-105 hover:border-blue-400 hover:shadow-2xl cursor-pointer"
-        />
-      </div>
-
-      {/* Mobile Layout - 2 columns */}
-      <div className="md:hidden grid grid-cols-2 gap-3">
-        {/* Top row - 3rd column images from desktop */}
-        <img
-          src={images[3]}
-          alt="img4"
-          className="w-full h-32 object-cover rounded-xl border-2 border-white shadow-lg transition-all duration-300 hover:scale-105 hover:border-blue-400 hover:shadow-2xl cursor-pointer"
-        />
-        <img
-          src={images[5]}
-          alt="img5"
-          className="w-full h-32 object-cover rounded-xl border-2 border-white shadow-lg transition-all duration-300 hover:scale-105 hover:border-blue-400 hover:shadow-2xl cursor-pointer"
-        />
-        <img
-          src={images[6]}
-          alt="img6"
-          className="w-full h-32 object-cover rounded-xl border-2 border-white shadow-lg transition-all duration-300 hover:scale-105 hover:border-blue-400 hover:shadow-2xl cursor-pointer"
-        />
-        <img
-          src={images[4]}
-          alt="img3"
-          className="w-full h-32 object-cover rounded-xl border-2 border-white shadow-lg transition-all duration-300 hover:scale-105 hover:border-blue-400 hover:shadow-2xl cursor-pointer"
-        />
-
-        {/* Main images - 2 columns */}
-        <img
-          src={images[1]}
-          alt="img1"
-          className="w-full h-64 object-cover rounded-xl border-2 border-white shadow-lg transition-all duration-300 hover:scale-105 hover:border-blue-400 hover:shadow-2xl cursor-pointer"
-        />
-        <img
-          src={images[2]}
-          alt="img2"
-          className="w-full h-64 object-cover rounded-xl border-2 border-white shadow-lg transition-all duration-300 hover:scale-105 hover:border-blue-400 hover:shadow-2xl cursor-pointer"
-        />
-
-        {/* Bottom image spanning 2 columns */}
-        <img
-          src={images[0]}
-          alt="img0"
-          className="w-full h-40 object-cover rounded-xl border-2 border-white shadow-lg col-span-2 transition-all duration-300 hover:scale-105 hover:border-blue-400 hover:shadow-2xl cursor-pointer"
-        />
-      </div>
+    <div className="columns-2 md:columns-3 gap-3">
+      {images.map((src, i) => (
+        <motion.button
+          key={`${src}-${i}`}
+          type="button"
+          onClick={() => onOpen(i)}
+          initial={{ opacity: 0, y: 14 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.15 }}
+          transition={{ duration: 0.45, delay: (i % 3) * 0.05, ease: EASE }}
+          className="group block w-full mb-3 break-inside-avoid rounded-xl overflow-hidden border border-white/10 hover:border-sky-400/60 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-sky-500/15"
+        >
+          <img
+            src={src}
+            alt={`Gallery ${i + 1}`}
+            loading="lazy"
+            className="w-full h-auto block"
+          />
+        </motion.button>
+      ))}
     </div>
   );
 };
 
-
-const About = () => (
-  <div className="space-y-6 animate-fadeIn">
-    {/* About Me Section */}
-    <div className="bg-gray-950 rounded-2xl p-6 border border-gray-800 shadow-2xl hover:border-blue-500/50 transition-all duration-300">
-      <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
-        <User className="text-blue-400" size={28} />
-        About Me
-      </h2>
-      <p className="text-gray-300 leading-relaxed mb-4">
-        I'm a passionate{" "}
-        <span className="text-blue-400 font-semibold">
-          Computer Engineering
-        </span>{" "}
-        student at Dr. D Y Patil Institute of Technology, currently in my final
-        year with a CGPA of{" "}
-        <span className="text-blue-400 font-semibold">8.78</span>. My interests
-        include front-end development, UI/UX design, problem-solving, and 2D
-        game development.
-      </p>
-      <p className="text-gray-300 leading-relaxed">
-        With expertise in modern web technologies and a creative mindset, I
-        enjoy building innovative solutions that combine functionality with
-        aesthetic appeal. I'm also passionate about photography, digital art,
-        and creating engaging content.
-      </p>
-    </div>
-
-    {/* Education Section */}
-    <div className="bg-gray-950 rounded-2xl p-6 border border-gray-800 shadow-2xl hover:border-blue-500/50 transition-all duration-300">
-      <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-        <Award className="text-blue-400" size={24} />
-        Education
-      </h2>
-
-      <div className="space-y-3">
-        {/* B.E. */}
-        <div className="bg-gray-900 p-4 rounded-lg border border-gray-700">
-          <h3 className="text-blue-400 font-semibold">
-            Bachelor in Computer Engineering
-          </h3>
-          <p className="text-gray-300">
-            Dr. D Y Patil Institute of Technology (DIT)
-          </p>
-          <p className="text-gray-400 text-sm">
-            Nov 2022 - July 2026 (Expected) | CGPA:{" "}
-            <span className="text-blue-400 font-semibold">8.78</span>
-          </p>
-        </div>
-
-        {/* HSC */}
-        <div className="bg-gray-900 p-4 rounded-lg border border-gray-700">
-          <h3 className="text-blue-400 font-semibold">
-            Higher Secondary Certificate (HSC)
-          </h3>
-          <p className="text-gray-300">Zeal Junior College</p>
-          <p className="text-gray-400 text-sm">
-            2020 - 2022 | Percentage:{" "}
-            <span className="text-blue-400 font-semibold">69.67%</span> | CET:{" "}
-            <span className="text-blue-400 font-semibold">95.58%</span>
-          </p>
-        </div>
-
-        {/* SSC */}
-        <div className="bg-gray-900 p-4 rounded-lg border border-gray-700">
-          <h3 className="text-blue-400 font-semibold">
-            Secondary School Certificate (SSC)
-          </h3>
-          <p className="text-gray-300">Foundation School</p>
-          <p className="text-gray-400 text-sm">
-            2019 - 2020 | Percentage:{" "}
-            <span className="text-blue-400 font-semibold">91.60%</span>
-          </p>
-        </div>
-      </div>
-    </div>
-
-    {/* Photo Stack Section */}
-    <div className="bg-gray-950 rounded-2xl p-6 border border-gray-800 shadow-2xl hover:border-blue-500/50 transition-all duration-300">
-      <h2 className="text-xl font-bold text-white mb-4 text-center">
-        My Gallery
-      </h2>
-      <PhotoStack />
-
-    </div>
-  </div>
+const Lightbox = ({ images, index, onClose, onStep }) => (
+  <AnimatePresence>
+    {index !== null && (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        onClick={onClose}
+        className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-sm grid place-items-center p-4"
+      >
+        <button
+          onClick={onClose}
+          aria-label="Close"
+          className="absolute top-4 right-4 p-2 text-white/70 hover:text-white"
+        >
+          <X size={26} />
+        </button>
+        <motion.img
+          key={index}
+          src={images[index]}
+          alt=""
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.3, ease: EASE }}
+          onClick={(e) => {
+            e.stopPropagation();
+            onStep(1);
+          }}
+          className="max-h-[85vh] max-w-full rounded-xl object-contain cursor-pointer"
+        />
+      </motion.div>
+    )}
+  </AnimatePresence>
 );
+
+const About = () => {
+  const { content } = useContent();
+  const { about } = content;
+  const [lightbox, setLightbox] = useState(null);
+
+  const step = (dir) =>
+    setLightbox((i) => (i === null ? null : (i + dir + about.gallery.length) % about.gallery.length));
+
+  return (
+    <div className="space-y-6">
+      <SectionHeader icon={User} title="About Me" subtitle="Who I am and where I've studied" />
+
+      <Reveal>
+        <TiltCard className="glass rounded-2xl p-5 sm:p-7 card-glow" max={3}>
+          <div className="space-y-4">
+            {about.paragraphs.map((para, i) => (
+              <p key={i} className="text-gray-300 leading-relaxed text-base">
+                {para}
+              </p>
+            ))}
+          </div>
+        </TiltCard>
+      </Reveal>
+
+      <Reveal delay={0.08}>
+        <div className="glass rounded-2xl p-5 sm:p-7 card-glow">
+          <h3 className="text-lg sm:text-xl font-bold mb-5 flex items-center gap-2.5">
+            <Award className="text-sky-400" size={21} />
+            Education
+          </h3>
+
+          <RevealGroup className="relative space-y-4 pl-6 sm:pl-8">
+            {/* Timeline spine */}
+            <span className="absolute left-[7px] sm:left-[9px] top-2 bottom-2 w-px bg-gradient-to-b from-sky-400 via-cyan-500/40 to-transparent" />
+
+            {about.education.map((ed, i) => (
+              <RevealItem key={i}>
+                <div className="relative">
+                  <span className="absolute -left-6 sm:-left-8 top-4 w-3.5 h-3.5 rounded-full bg-sky-400 ring-4 ring-sky-400/15" />
+                  <div className="bg-white/[0.03] p-4 rounded-xl border border-white/10 hover:border-sky-500/40 transition-colors">
+                    <h4 className="text-sky-400 font-semibold text-base sm:text-lg">{ed.degree}</h4>
+                    <p className="text-gray-300 text-base mt-0.5">{ed.school}</p>
+                    <p className="text-gray-500 text-sm mt-1.5 flex flex-wrap gap-x-2 gap-y-1">
+                      <span>{ed.meta}</span>
+                      {ed.score && (
+                        <span className="text-cyan-400 font-medium">· {ed.score}</span>
+                      )}
+                    </p>
+                  </div>
+                </div>
+              </RevealItem>
+            ))}
+          </RevealGroup>
+        </div>
+      </Reveal>
+
+      {about.gallery?.length > 0 && (
+        <Reveal delay={0.12}>
+          <div className="glass rounded-2xl p-5 sm:p-7 card-glow">
+            <h3 className="text-lg sm:text-xl font-bold mb-5 flex items-center gap-2.5">
+              <Images className="text-sky-400" size={21} />
+              Gallery
+            </h3>
+            <Gallery images={about.gallery} onOpen={setLightbox} />
+          </div>
+        </Reveal>
+      )}
+
+      <Lightbox
+        images={about.gallery || []}
+        index={lightbox}
+        onClose={() => setLightbox(null)}
+        onStep={step}
+      />
+    </div>
+  );
+};
 
 export default About;
