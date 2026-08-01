@@ -1,25 +1,20 @@
-import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
+import React, { createContext, useContext, useState, useCallback } from "react";
 import { fetchContent, getCachedContent } from "../lib/contentService";
 
 const ContentContext = createContext(null);
 
 export const ContentProvider = ({ children }) => {
+  // Content is bundled (src/data/defaultContent.js) — no loading state needed.
   const [content, setContent] = useState(getCachedContent);
-  const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(async () => {
     const next = await fetchContent();
     setContent(next);
-    setLoading(false);
     return next;
   }, []);
 
-  useEffect(() => {
-    refresh();
-  }, [refresh]);
-
   return (
-    <ContentContext.Provider value={{ content, setContent, loading, refresh }}>
+    <ContentContext.Provider value={{ content, setContent, loading: false, refresh }}>
       {children}
     </ContentContext.Provider>
   );
