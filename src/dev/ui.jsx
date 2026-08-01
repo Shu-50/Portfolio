@@ -149,7 +149,7 @@ export const AddButton = ({ onClick, children }) => (
 );
 
 /**
- * File picker that saves into public/uploads/ and hands back the site URL.
+ * File picker that uploads to Supabase Storage and hands back the public URL.
  * Also accepts a pasted URL so existing /public paths keep working.
  */
 export const AssetUpload = ({

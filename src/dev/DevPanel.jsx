@@ -22,7 +22,14 @@ import {
   FileText,
 } from "lucide-react";
 import { useContent } from "../context/ContentContext";
-import { saveContent, deleteAsset, canEdit, DEV_GATE_CODE } from "../lib/contentService";
+import {
+  saveContent,
+  deleteAsset,
+  signInAdmin,
+  signOutAdmin,
+  DEV_GATE_CODE,
+} from "../lib/contentService";
+import { isSupabaseConfigured } from "../lib/supabaseClient";
 import defaultContent from "../data/defaultContent";
 import { Btn } from "./ui";
 import {
@@ -130,6 +137,7 @@ const DevPanel = () => {
   const [tab, setTab] = useState("profile");
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState(null);
+  const [authState, setAuthState] = useState("idle"); // idle | ok | failed
   const importRef = useRef(null);
 
   // Resume/avatar URLs at load time — used to clean up replaced files on save.
@@ -149,6 +157,11 @@ const DevPanel = () => {
       originalAssets.current = { resume: content.profile.resumeUrl, avatar: content.profile.avatar };
     }
   }, [content]);
+
+  useEffect(() => {
+    if (!unlocked) return;
+    signInAdmin().then((r) => setAuthState(r.ok ? "ok" : r.soft ? "idle" : "failed"));
+  }, [unlocked]);
 
   useEffect(() => {
     const warn = (e) => {
@@ -177,7 +190,7 @@ const DevPanel = () => {
       originalAssets.current = { resume: draft.profile.resumeUrl, avatar: draft.profile.avatar };
 
       setContent(draft);
-      notify("success", "Saved to defaultContent.js — commit & push to publish.");
+      notify("success", "Saved — the live site is updated.");
     } catch (err) {
       notify("error", err.message);
     } finally {
@@ -189,7 +202,7 @@ const DevPanel = () => {
     if (dirty && !window.confirm("Discard all unsaved changes?")) return;
     const fresh = await refresh();
     setDraft(fresh);
-    notify("success", "Changes discarded.");
+    notify("success", "Reloaded from the database.");
   };
 
   const handleReset = () => {
@@ -228,9 +241,10 @@ const DevPanel = () => {
     setUnlocked(true);
   };
 
-  const lock = () => {
+  const lock = async () => {
     if (dirty && !window.confirm("You have unsaved changes. Log out anyway?")) return;
     sessionStorage.removeItem(SESSION_KEY);
+    await signOutAdmin();
     setUnlocked(false);
   };
 
@@ -292,15 +306,25 @@ const DevPanel = () => {
           </div>
         </div>
 
-        {/* Deployed builds have no write API — edits happen on your machine. */}
-        {!canEdit && (
+        {/* warnings */}
+        {!isSupabaseConfigured && (
           <div className="px-4 sm:px-6 py-2.5 bg-amber-500/10 border-t border-amber-500/25 text-amber-200 text-xs flex items-start gap-2">
             <ShieldAlert size={15} className="shrink-0 mt-0.5" />
             <span>
-              This is the live site — it's read-only. To edit: run{" "}
-              <code className="text-amber-100">npm run dev</code> on your computer, open{" "}
-              <code className="text-amber-100">localhost:5173/dev</code>, save, then commit &amp; push
-              to publish.
+              Supabase isn't configured — edits and uploads can't be saved. Add{" "}
+              <code className="text-amber-100">VITE_SUPABASE_URL</code> and{" "}
+              <code className="text-amber-100">VITE_SUPABASE_ANON_KEY</code> to your{" "}
+              <code className="text-amber-100">.env</code>, then restart the dev server. You can still
+              use Export JSON below.
+            </span>
+          </div>
+        )}
+        {isSupabaseConfigured && authState === "failed" && (
+          <div className="px-4 sm:px-6 py-2.5 bg-red-500/10 border-t border-red-500/25 text-red-200 text-xs flex items-start gap-2">
+            <ShieldAlert size={15} className="shrink-0 mt-0.5" />
+            <span>
+              Admin sign-in failed. Check <code>VITE_ADMIN_EMAIL</code> / <code>VITE_ADMIN_PASSWORD</code>{" "}
+              against the user you created in Supabase → Authentication.
             </span>
           </div>
         )}
